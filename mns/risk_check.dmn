@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="Definitions_0watggw" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="4.12.0">
+  <decision id="dtiBand" name="dtiBand" camunda:historyTimeToLive="365">
+    <decisionTable id="DecisionTable_06gx0kb" hitPolicy="FIRST">
+      <input id="Input_1" label="existingDebt/monthlyIncome">
+        <inputExpression id="InputExpression_1" typeRef="double">
+          <text>existingDebt/monthlyIncome</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1bnfhxj" label="monthlyIncome">
+        <inputExpression id="LiteralExpression_1o384n8" typeRef="double">
+          <text>monthlyIncome</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="dtiBand" name="dtiBand" typeRef="string" />
+      <rule id="DecisionRule_0dbg7ho">
+        <inputEntry id="UnaryTests_0rduwhd">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0sb770p">
+          <text>&lt;=0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1bljo45">
+          <text>"INVALID"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1w92bud">
+        <inputEntry id="UnaryTests_1b3aoup">
+          <text>&gt; 0.6</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0p183zh">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_08ycv9b">
+          <text>"VERY_HIGH"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_08cird5">
+        <inputEntry id="UnaryTests_0q0qysu">
+          <text>&gt; 0.35</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_12lv0oz">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1w8f6t3">
+          <text>"HIGH"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1hkn8ng">
+        <inputEntry id="UnaryTests_1s5qdmo">
+          <text>&gt; 0.2</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1ey3rlv">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0kg3xpp">
+          <text>"MEDIUM"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_060gaph">
+        <inputEntry id="UnaryTests_0htzs3x">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0qnvhxk">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1mehxby">
+          <text>"LOW"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="creditBand" name="creditBand" camunda:historyTimeToLive="365">
+    <decisionTable id="DecisionTable_039p2xn" hitPolicy="FIRST">
+      <input id="InputClause_1busxkn" label="creditScore">
+        <inputExpression id="LiteralExpression_14tlgfn" typeRef="double">
+          <text>creditScore</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0pl6dxc" label="creditBand" name="creditBand" typeRef="string" />
+      <rule id="DecisionRule_1qlhp4t">
+        <inputEntry id="UnaryTests_05bl528">
+          <text>&lt;550</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_19a0l78">
+          <text>"BAD"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1v1h6sb">
+        <inputEntry id="UnaryTests_1ecxjww">
+          <text>[550..650]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1jccf7d">
+          <text>"FAIR"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1mwugtb">
+        <inputEntry id="UnaryTests_136hmwj">
+          <text>[650..750]</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ooonyv">
+          <text>"GOOD"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0o9yhu8">
+        <inputEntry id="UnaryTests_0dwmbs9">
+          <text>&gt;=750</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0m3wsg1">
+          <text>"EXCELLENT"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1nykhqv">
+        <inputEntry id="UnaryTests_1trhqvf">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ol6chy">
+          <text>"UNKNOWN"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="FinalRisk" name="FinalRisk" camunda:historyTimeToLive="365">
+    <informationRequirement id="InformationRequirement_13ag2hr">
+      <requiredDecision href="#dtiBand" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_0qf76qj">
+      <requiredDecision href="#creditBand" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_0pnu0kv" hitPolicy="FIRST">
+      <input id="InputClause_03mccih" label="amount">
+        <inputExpression id="LiteralExpression_1pk3d9y" typeRef="double">
+          <text>amount</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_04qbtd2" label="monthlyIncome">
+        <inputExpression id="LiteralExpression_0zp9ccl" typeRef="double">
+          <text>monthlyIncome</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_08s86my" label="dtiBand" biodi:width="192">
+        <inputExpression id="LiteralExpression_0ziz1ah" typeRef="string">
+          <text>dtiBand</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0k7q8io" label="creditBand">
+        <inputExpression id="LiteralExpression_1ivct49" typeRef="string">
+          <text>creditBand</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_0qe6jbj" label="riskScore" name="riskScore" typeRef="integer" />
+      <output id="OutputClause_0tgd72r" label="manualReview" name="manualReview" typeRef="boolean" />
+      <output id="OutputClause_1ao0m67" label="reason" name="reason" typeRef="string" />
+      <rule id="DecisionRule_08oym07">
+        <inputEntry id="UnaryTests_10uan65">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_020l7mr">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0pew0er">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1yb861i">
+          <text>"BAD"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0miz6l5">
+          <text>90</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1l14657">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1rrrg1s">
+          <text>"Bad Credit"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0ddsyg0">
+        <inputEntry id="UnaryTests_10n7mkp">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0zhz37x">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1gtgjhd">
+          <text>"HIGH","VERY_HIGH"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0733dej">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_19nbmao">
+          <text>80</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_16gel9a">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0s8x3cs">
+          <text>"High DTI"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_01ogtq8">
+        <inputEntry id="UnaryTests_041980f">
+          <text>&gt; monthlyIncome * 20</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_05m0zhh">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0931mzs">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0476o7w">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0dpxylz">
+          <text>70</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_10azni7">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0g9ue19">
+          <text>"High amount vs income"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0nyx53q">
+        <inputEntry id="UnaryTests_18aprh3">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1mz7hze">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_17qkieo">
+          <text>"MEDIUM"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_16l91yp">
+          <text>"FAIR"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1ey9emv">
+          <text>60</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1sb7o89">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_168uwl1">
+          <text>"Fair Credit + medium dti"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_10ejacx">
+        <inputEntry id="UnaryTests_1ma7we0">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1wjtiyz">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1vzp8di">
+          <text>"LOW","MEDIUM"</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0h2yo6b">
+          <text>"GOOD","EXCELLENT"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0yp398r">
+          <text>20</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0v1uwd4">
+          <text>false</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_01t8y51">
+          <text>"Low Risk"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1c1jf5t">
+        <inputEntry id="UnaryTests_0ynvepv">
+          <text>true</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0ktwdzh">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0q34p0d">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0vu0qmp">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0cjqgwt">
+          <text>50</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_05q6fup">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0zjt5kc">
+          <text>"Default -&gt; manual review"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0u7s9we">
+        <inputEntry id="UnaryTests_0fxsmgi">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0t4hnry">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0vngl7y">
+          <text></text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0emrk27">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_16axoa9">
+          <text>50</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_021yw4s">
+          <text>true</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0h5s3gb">
+          <text>"Default"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="dtiBand">
+        <dc:Bounds height="80" width="180" x="160" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0weo08k" dmnElementRef="creditBand">
+        <dc:Bounds height="80" width="180" x="470" y="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_1j3oqm7" dmnElementRef="FinalRisk">
+        <dc:Bounds height="80" width="180" x="320" y="290" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_146ifos" dmnElementRef="InformationRequirement_13ag2hr">
+        <di:waypoint x="250" y="160" />
+        <di:waypoint x="380" y="270" />
+        <di:waypoint x="380" y="290" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_1dfjqz1" dmnElementRef="InformationRequirement_0qf76qj">
+        <di:waypoint x="560" y="160" />
+        <di:waypoint x="440" y="270" />
+        <di:waypoint x="440" y="290" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
