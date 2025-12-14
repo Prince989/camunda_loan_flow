@@ -1,0 +1,6 @@
+services:
+  camunda:
+    image: camunda/camunda-bpm-platform:7.18.0
+    container_name: camunda
+    ports:
+      - "8080:8080"
