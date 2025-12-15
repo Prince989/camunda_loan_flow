@@ -129,10 +129,45 @@ Decision output:
 
 ## API Example
 
-### Start Process
+The application exposes a simple HTTP endpoint that accepts a loan application and then starts the workflow + evaluates the DMN behind the scenes.
+
+### Create a Loan Application
+
+**Endpoint**
+
+```http
+POST /api/loan
+Content-Type: application/json
+```
+
+**Payload**
+
+```json
+{
+  "applicantName": "Andro",
+  "email": "andro@test.com",
+  "amount": 10000,
+  "monthlyIncome": 2500,
+  "existingDebt": 500,
+  "creditScore": 720,
+  "currency": "EUR"
+}
+```
+
+**cURL**
 
 ```bash
-POST /engine-rest/process-definition/key/loan_approval/start
+curl -X POST "http://localhost:8080/api/loan" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "applicantName": "Andro",
+    "email": "andro@test.com",
+    "amount": 10000,
+    "monthlyIncome": 2500,
+    "existingDebt": 500,
+    "creditScore": 720,
+    "currency": "EUR"
+  }'
 ```
 
 ---
